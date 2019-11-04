@@ -1,0 +1,152 @@
+1.0 to 1.1:
+===========
+
+Updated documentation to reflect glean's new home page on
+sourceforge.net.
+
+Adam Haberlach <adam@newsnipple.com> of Be added support for BeOS, as
+well as the "teapot" test.
+
+Prep work for new tests that rely on drawing lots of triangles, and
+being able to confirm that they're drawn:  Added RGBCodedID class (which
+maps an integer identifier into a unique RGB triple, and vice versa).
+Added SpiralStrip2D and SpiralTri2D classes, which generate lots
+of geometry with well-defined characteristics.
+
+Fixed a bug in the RandomMesh2D algorithm, which sometimes generated
+overlapping triangles.
+
+Added translation by 0.375 (as recommended by the Red Book) to the GL
+utility that sets up a simple mapping from object to screen
+coordinates.
+
+Added haveExtension() to GLUtils so that tests can conveniently check
+for the existence of a particular extension, and haveExtensions()
+so that they can check for an entire set of extensions at once.
+
+Added getProcAddress() to GLUtils to fetch addresses of extension
+functions.
+
+Added logGLErrors() to GLUtils to write textual versions of OpenGL
+errors to the logfile.
+
+Added the vertex-performance tests (coloredLitPerf, ...) that compare
+various ways of supplying vertex data to determine which is fastest.
+
+Added OpenGL state-setting "cheat-sheet."
+
+Added syntactic-sugar objects GLUtils::Light, GLUtils::LightModel, and
+GLUtils::Material for setting lighting parameters.
+
+Added --listtests option, which lists all the test names in sorted
+order and then exits.
+
+Added tests for pixel-exact rendering in the 2D orthographic projection
+case that's described in the appendix of the Red Book.  (Per suggestion
+from Brian Paul <brian@valinux.com>.)
+
+Added test for MakeCurrent functionality, checking all combinations
+of direct, indirect, and null contexts.
+
+Brian Paul added tests for masked clear and for the
+EXT_texture_env_combine extension.
+
+Made ErrorBits() function available in misc.h, so that all tests can
+conveniently compute accuracy in terms of the number of color-channel
+bits.  (Was in tblend.cpp.)
+
+Added a new constructor to the class BasicTest (tbasic.cpp) which allows
+the user to specify (as a string) a list of names of extensions which
+must be supported by a rendering context before the test will be run on
+that context.  Modified the EXT_texture_env_combine test to use it.
+
+Fixed a bug reported by Rik Faith; comparison of two test databases
+now continues even if some results are missing from one or both
+databases.
+
+
+0.6 to 1.0:
+===========
+
+Added hints to set window position as well as size, so that users
+of window managers without automatic window placement don't have
+to click to create each test window.
+
+0.5 to 0.6:
+===========
+
+Replaced *.dsw and *.dsp files with nmake makefiles (named
+makefile.win) for building on Windows.
+
+Added Johan Smet's documentation for building glean on Windows.  This
+necessitated reworking the documentation structure somewhat.
+
+Fixed a storage allocation bug in the Windows version of showvis.
+
+Fixed a couple of problems in libs/dsurf/dsconfig.cpp related to the
+visual_rating extension that caused compilation errors on some
+systems.  Thanks to Brian Paul for catching these.
+
+Brian also reported some bizarre link errors.  These occurred because
+there were multiple gl.h files installed on his system, and the
+makefiles searched different header file directories for different
+glean components.  This has been worked around by changing common.mak
+and the individual makefiles to search for header files and libraries
+in the same order for all components.  This is not a universal
+solution; if your system has a very unusual configuration of library
+or header directories, you may need to customize the makefiles.
+
+0.4 to 0.5:
+===========
+
+Incorporated the second set of Johan Smet's <johan.smet@glo.be>
+changes to port glean to Microsoft Windows.
+
+0.3 to 0.4:
+===========
+
+Added the ability to include or exclude specific tests from a run.
+
+A recent change in the behavior of the C++ string getline() function
+in the GNU libraries caused glean's test comparison operation to
+appear to hang.  The new behavior appears to be correct, but it was
+necessary to add a workaround to glean so that it would run properly
+on both old and new versions of the library.
+
+
+0.2 to 0.3:
+===========
+
+Incorporated the first set of Johan Smet's <johan.smet@glo.be> changes
+to port glean to Microsoft Windows.  These included:
+
+        VC6 still uses old-style scoping rules for variables declared
+        in the init part of ``for'' statements, so in some cases new
+        blocks or new variables were introduced to avoid collisions.
+
+        VC6 has trouble with some styles of initialization in
+        declarations; for example,
+                WindowSystem& ws(env->winSys);
+        had to be changed to
+                WindowSystem& ws = env->winSys;
+
+        Several items in the std namespace (notably the stream
+        functions) weren't scoped correctly.  These were all fixed
+        with ``using namespace std'' or explicit qualification, as
+        needed.
+
+        VC6 can't handle the template functions used for image packing
+        and unpacking, so those were replaced.
+
+
+0.1 to 0.2:
+===========
+
+In lib/dsurf, bit counts for green and blue channels were reversed.
+This caused incorrect drawing-surface configuration reports for normal
+color channels and accumulation buffer channels, and also confused
+code that determined errors in color values.
+
+In lib/dsurf, the expression for computing bits-in-error was in error. :-)
+
+Switched from egcs to g++ in common.mak.
